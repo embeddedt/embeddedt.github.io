@@ -1,0 +1,26 @@
+---
+import { Icon } from 'astro-icon/components'
+---
+
+
+<div class="social-links">
+    <a href="https://discord.gg/rN9Y7caguP"><Icon name="ic:baseline-discord"/></a>
+    <a href="https://github.com/embeddedt"><Icon name="mdi:github"/></a>
+</div>
+<style>
+   .social-links {
+		display: flex;
+		justify-content: center;
+		gap: 1em;
+		color: rgb(var(--gray));
+	}
+	.social-links :global(*) {
+		text-decoration: none;
+	}
+	.social-links :global(*):hover {
+		color: rgb(var(--gray-dark));
+	}
+    [data-icon], :global(.theme-toggle) {
+        font-size: 24px;
+    }
+</style>

@@ -1,0 +1,126 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import { Image } from 'astro:assets';
+
+const projects = (await getCollection('projects')).sort(
+	(a, b) => {
+        const nameA = a.data.name.toUpperCase();
+        const nameB = b.data.name.toUpperCase();
+        if (nameA < nameB) {
+            return -1;
+        }
+        if (nameA > nameB) {
+            return 1;
+        }
+        return 0;
+    }
+);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+        <style>
+            .project-cards {
+                padding-left: 0;
+                list-style-type: none;
+                display: flex;
+                flex-wrap: wrap;
+                --project-card-logo-size: 5em;
+                --project-card-content-padding: 1em;
+                --project-card-border-radius: 0.5em;
+            }
+
+            .project-cards li {
+                flex: 1;
+                border: 1px solid black;
+                border-radius: var(--project-card-border-radius);
+                background-color: white;
+                box-shadow: 0 0 4px;
+                transition: box-shadow 0.1s linear;
+                width: 100%;
+                max-width: 300px;
+                margin: 0.5em;
+            }
+
+            .project-cards li:hover {
+                box-shadow: 0 0 8px;
+            }
+
+            .project-cards li a {
+                color: var(--gray);
+                text-decoration: none;
+            }
+
+            .content-container {
+                padding: var(--project-card-content-padding);
+                position: relative;
+                border-radius: 0 0 var(--project-card-border-radius) var(--project-card-border-radius);
+            }
+
+            .banner-container {
+                height: calc(var(--project-card-logo-size) + var(--project-card-content-padding));
+                border-radius: var(--project-card-border-radius) var(--project-card-border-radius) 0 0;
+                background-size: cover;
+            }
+
+            .project-cards li img {
+                position: absolute;
+                top: calc(var(--project-card-logo-size) * -1 + (var(--project-card-content-padding) / 2));
+                width: var(--project-card-logo-size);
+                height: var(--project-card-logo-size);
+                border-radius: 0.25em;
+                box-shadow: 0 0 1px;
+            }
+
+            .detail {
+                color: #999;
+                font-size: 0.8em;
+                line-height: 1.5;
+            }
+
+            .role-pill {
+                background-color: lightgray;
+                border-radius: 2px;
+                font-size: 12px;
+                vertical-align: middle;
+                display: inline-block;
+                padding: 2px;
+            }
+        </style>
+    </head>
+    <body>
+        <Header />
+		<main>
+			<section>
+                Below is a list of selected projects I either authored or made
+                extensive contributions to.
+                <ul class="project-cards">
+                    {projects.map(project => (
+                        <li>
+                            <a href={project.data.link ?? `/projects/${project.id}/`}>
+                                <div class="banner-container" style={{
+                                    ...(project.data.banner ? {
+                                        backgroundImage: `url(${project.data.banner.src})`
+                                    } : {})
+                                }}>
+                                </div>
+                                <div class="content-container">
+                                    {project.data.logo && <Image src={project.data.logo} alt={project.data.name + " logo"}/>}
+                                    <h4 class="name">{project.data.name} <span class="role-pill">{project.data.role.charAt(0).toUpperCase() + project.data.role.substring(1)}</span></h4>
+                                    <div class="detail">{project.data.summary}</div>
+                                </div>
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </section>
+        </main>
+        <Footer />
+    </body>
+</html>

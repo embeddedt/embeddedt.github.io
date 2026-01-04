@@ -90,7 +90,7 @@ const posts = (await getCollection('blog')).sort(
 		<Header />
 		<main>
 			<section>
-				<ul>
+				{posts.length > 0 && <ul>
 					{
 						posts.map((post) => (
 							<li>
@@ -99,14 +99,18 @@ const posts = (await getCollection('blog')).sort(
 										<Image width={720} height={360} src={post.data.heroImage} alt="" />
 									)}
 									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
+									{post.data.pubDate && <p class="date">
 										<FormattedDate date={post.data.pubDate} />
-									</p>
+									</p>}
+									<div>
+										{post.data.description}
+									</div>
 								</a>
 							</li>
 						))
 					}
-				</ul>
+				</ul>}
+				{posts.length == 0 && <div>Welp, no posts have been made yet! Move along.</div>}
 			</section>
 		</main>
 		<Footer />
