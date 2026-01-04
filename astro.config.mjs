@@ -8,6 +8,6 @@ import icon from 'astro-icon';
 
 // https://astro.build/config
 export default defineConfig({
-    site: 'https://embeddedt.github.io/',
+    site: 'https://embeddedt.github.io',
     integrations: [mdx(), sitemap(), icon()],
 });
